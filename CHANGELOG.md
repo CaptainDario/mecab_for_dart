@@ -1,5 +1,9 @@
 # Mecab dart plus
 
+## 1.0.7
+
+* Updated plugin for new AGP
+
 ## 1.0.6
 
 * Fixed plugin on Linux
