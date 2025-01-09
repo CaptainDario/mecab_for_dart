@@ -1,5 +1,12 @@
 # Mecab dart plus
 
+## 1.1.0
+
+**Breaking**
+This version requires the native assets feature to be enalbed
+
+* Support dart standalone
+
 ## 1.0.7
 
 * Updated plugin for new AGP
