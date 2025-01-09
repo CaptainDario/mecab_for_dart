@@ -10,36 +10,21 @@ funding:
 
 environment:
   sdk: '>=2.12.0 <4.0.0'
-  flutter: ">=1.10.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   universal_ffi: ^1.1.0
-  path_provider: ^2.0.11
   path: ^1.0.0
   universal_io: ^2.2.2
-  flutter_web_plugins:
-    sdk: flutter
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   import_sorter: ^4.6.0
+  native_assets_cli: ^0.10.0
 
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.example.mecab_for_dart
-        pluginClass: MecabForDartPlugin
-      ios:
-        pluginClass: MecabForDartPlugin
-      windows:
-        pluginClass: MecabForDartPluginCApi
-      linux:
-        pluginClass: MecabForDartPlugin
-      macos:
-        pluginClass: MecabForDartPlugin
-      web:
+platforms:
+  android:
+  ios:
+  windows:
+  linux:
+  macos:
+  web:
 
