@@ -78,6 +78,13 @@ However, it may be desirable to swap dictionaries. To do this, you need to load 
 
 ## Building the binaries
 
+### MacOS
+
+```bash
+cd macos/Classes/
+make libmecab
+```
+
 ### Windows
 
 Because mecab uses nmake on windows to compile, the mecab DLL needs to be created separately.
