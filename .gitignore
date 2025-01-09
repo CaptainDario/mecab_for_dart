@@ -17,6 +17,11 @@ windows/src/*.exp
 windows/src/*.def
 windows/src/*.pdb
 
+# ignore macos build files
+macos/Classes/*.o
+macos/Classes/*.dylib
+
 # ignore mecab web binary
 example/blobs/*
 !example/blobs/.gitkeep
+
