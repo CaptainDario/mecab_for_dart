@@ -33,9 +33,17 @@ class MecabDartFfi {
 
 
   /// Initializes the communication to ffi
-  Future<void> init(String libmecabPath) async {
+  Future<void> init({String? libmecabPath, FfiHelper? mecabFfiHelper}) async {
 
-    mecabDartFfiHelper = await FfiHelper.load(libmecabPath);
+    if(libmecabPath == null && mecabFfiHelper == null){
+      throw ArgumentError("Not **both** `libmecabPath` and `mecabFfiHelper` can be null!");
+    }
+    if(libmecabPath != null) {
+      mecabDartFfiHelper = await FfiHelper.load(libmecabPath);
+    }
+    if(mecabFfiHelper != null) {
+      mecabDartFfiHelper = mecabFfiHelper;
+    }
 
     initMecabPointer = mecabDartFfiHelper.library
       .lookup<NativeFunction<InitMecabFunc>>('initMecab');

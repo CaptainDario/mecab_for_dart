@@ -25,7 +25,7 @@ class Mecab {
   
     var options = includeFeatures ? "" : "-Owakati";
     mecabDartFfi = MecabDartFfi();
-    await mecabDartFfi.init(libmecabPath);
+    await mecabDartFfi.init(libmecabPath: libmecabPath);
 
     mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
       mecabDartFfi.mecabPtr = mecabDartFfi.initMecabFfi(
