@@ -1,7 +1,8 @@
 # mecab_for_dart
 
-MeCab(Japanese Morphological Analyzer) bindings for dart (standalone dart and flutter!) on all platforms.
-[Try it out in the browser](https://captaindario.github.io/mecab_for_dart/).
+MeCab (Japanese Morphological Analyzer) bindings for standalone dart.
+The Flutter version of this package can be found [here](https://pub.dev/packages/mecab_for_flutter)
+[Try it out using flutter in the browser!](https://captaindario.github.io/mecab_for_dart/).
 
 | Android | iOS | Windows | MacOS | Linux | Web | Web --wasm |
 |:-------:|:---:|:-------:|:-----:|:-----:|:---:|:----------:|
@@ -15,13 +16,23 @@ dependencies:
    mecab_for_dart: <your_version> 
 ```
 
+## Getting the binaries
+
+Pre-compiled binaries are provided for Linux (x86/arm64), Macos (x86/arm64) and Windows (x86/arm64), you can download them [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
+Download the one you need and place them somwhere your data application can access them, in this README that path will be donated by <LIB_MECAB_PATH>
+
+## Getting a dictionary
+
+Any dictionary that is compatible with mecab will work, but for ease of getting started, a copy of ipadic and unidic is provided [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
+Download the one you need and place them somwhere your data application can access them, in this README that path will be donated by <DICT_MECAB_PATH>
+
 ## Example
 
 Init Mecab:
 
 ```dart
 var tagger = new Mecab();
-await tagger.init("path/to/your/dictionary/", true);
+await tagger.init("<LIB_MECAB_PATH>", "<DICT_MECAB_PATH>", true);
 ```
 
 Set the boolean option in `init` function to true if you want to get the tokens including features,
@@ -53,6 +64,10 @@ However, it may be desirable to swap dictionaries. To do this, you need to load 
 
 ## Building the binaries
 
+### Linux
+
+TODO
+
 ### MacOS
 
 ```bash
@@ -66,6 +81,11 @@ Because mecab uses nmake on windows to compile, the mecab DLL needs to be create
 For this open a [**Developer Command Prompt**](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022) and change in the `windows/src` directory.
 In this directory execute `nmake -f  Makefile.x64.msvc` (compile on x86) or `nmake -f  Makefile.arm64.msvc` (compile on arm64).
 After the build process finished, there should be a `libmecab.dll` in `windows/src`.
+
+### Android / iOS
+
+As dart is not really available for running on iOS / Android there are no precompiled binaries or build scripts available.
+If you see a need for this please open an issue or PR!
 
 ### Web
 
