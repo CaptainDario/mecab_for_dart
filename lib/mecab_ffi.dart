@@ -3,8 +3,7 @@ import 'package:universal_ffi/ffi.dart';
 import 'package:universal_ffi/ffi_helper.dart';
 import 'package:universal_ffi/ffi_utils.dart';
 
-// Project imports:
-import 'mecab_dart_lib.dart';
+
 
 typedef InitMecabFunc = Pointer<Void> Function(
   Pointer<Utf8> options, Pointer<Utf8> dicdir);
@@ -34,9 +33,9 @@ class MecabDartFfi {
 
 
   /// Initializes the communication to ffi
-  Future<void> init() async {
+  Future<void> init(String libmecabPath) async {
 
-    mecabDartFfiHelper = await loadMecabDartLib();
+    mecabDartFfiHelper = await FfiHelper.load(libmecabPath);
 
     initMecabPointer = mecabDartFfiHelper.library
       .lookup<NativeFunction<InitMecabFunc>>('initMecab');

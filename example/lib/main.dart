@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       // Initialize mecab tagger here 
       //   + 1st parameter : dictionary folder
       //   + 2nd parameter : additional mecab options
-      await tagger.init(ipaDictPath, true);
+      await tagger.init(, ipaDictPath, true);
 
       print("Connection to the C-side established: ${tagger.mecabDartFfi.nativeAddFunc(3, 3) == 6}");
 

@@ -13,17 +13,19 @@ class Mecab {
   late final MecabDartFfi mecabDartFfi;
 
 
-  /// Initializes this mecab instance, `dictDir` should be a directory that
-  /// contains a Mecab dictionary (ex. IpaDic) 
+  /// Initializes this mecab instance,
+  /// `libmecabPath` should be the path to a mecab dynamic library
+  /// `dictDir` should be a directory that contains a Mecab dictionary
+  /// (ex. IpaDic) 
   /// If `includeFeatures` is set, the output of mecab includes the
   /// token-features.
   /// 
   /// Warning: This method needs to be called before any other method
-  Future<void> init(String dictDir, bool includeFeatures) async {
+  Future<void> init(String libmecabPath, String dictDir, bool includeFeatures) async {
   
     var options = includeFeatures ? "" : "-Owakati";
     mecabDartFfi = MecabDartFfi();
-    await mecabDartFfi.init();
+    await mecabDartFfi.init(libmecabPath);
 
     mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
       mecabDartFfi.mecabPtr = mecabDartFfi.initMecabFfi(
