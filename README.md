@@ -67,13 +67,20 @@ However, it may be desirable to swap dictionaries. To do this, you need to load 
 
 ### Linux
 
-TODO
+```bash
+cd macos/Classes/
+# this builds for the architecture you are on
+make libmecab
+```
 
 ### MacOS
 
 ```bash
 cd macos/Classes/
 make libmecab
+
+# use rosetta
+arch -x86_64 make libmecab
 ```
 
 ### Windows
