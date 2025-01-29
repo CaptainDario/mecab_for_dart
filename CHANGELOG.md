@@ -1,5 +1,9 @@
 # Mecab dart plus
 
+## 1.1.1
+
+* Do not include large assets in pub package
+
 ## 1.1.0
 
 * Split mecab packge into flutter and dart packages
