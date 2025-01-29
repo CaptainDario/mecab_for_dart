@@ -2,6 +2,7 @@
 
 MeCab (Japanese Morphological Analyzer) bindings for standalone dart.
 The Flutter version of this package can be found [here](https://pub.dev/packages/mecab_for_flutter)
+
 [Try it out using flutter in the browser!](https://captaindario.github.io/mecab_for_dart/).
 
 | Android | iOS | Windows | MacOS | Linux | Web | Web --wasm |
