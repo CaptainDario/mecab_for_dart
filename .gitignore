@@ -21,6 +21,10 @@ windows/src/*.pdb
 macos/Classes/*.o
 macos/Classes/*.dylib
 
+# ignore linux build files
+linux/*.o
+linux/*.so
+
 # ignore mecab web binary
 example/blobs/*
 !example/blobs/.gitkeep

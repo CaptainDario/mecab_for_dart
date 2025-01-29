@@ -1,6 +1,7 @@
 #include "mecab.h"
 #include <vector>
 #include <string>
+#include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
 
