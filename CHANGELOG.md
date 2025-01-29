@@ -1,5 +1,9 @@
 # Mecab dart plus
 
+## 1.1.2
+
+* Added linux makefile and updated build instructions
+
 ## 1.1.1
 
 * Do not include large assets in pub package

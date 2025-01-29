@@ -68,7 +68,7 @@ However, it may be desirable to swap dictionaries. To do this, you need to load 
 ### Linux
 
 ```bash
-cd macos/Classes/
+cd linux/
 # this builds for the architecture you are on
 make libmecab
 ```
@@ -79,7 +79,7 @@ make libmecab
 cd macos/Classes/
 make libmecab
 
-# use rosetta
+# use rosetta on apple silicone to cross compile
 arch -x86_64 make libmecab
 ```
 
