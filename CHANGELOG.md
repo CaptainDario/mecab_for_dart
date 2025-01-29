@@ -2,10 +2,9 @@
 
 ## 1.1.0
 
-**Breaking**
-This version requires the native assets feature to be enalbed
-
-* Support dart standalone
+* Split mecab packge into flutter and dart packages
+  * This package can now run in dart standalone
+  * Flutter package with bundled libraries is [here](https://pub.dev/packages/mecab_for_flutter)
 
 ## 1.0.7
 
