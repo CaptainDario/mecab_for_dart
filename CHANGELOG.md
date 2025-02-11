@@ -1,5 +1,9 @@
 # Mecab dart plus
 
+## 1.1.3
+
+* Updated REDAME
+
 ## 1.1.2
 
 * Added linux makefile and updated build instructions
