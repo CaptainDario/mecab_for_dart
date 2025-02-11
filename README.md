@@ -3,7 +3,7 @@
 MeCab (Japanese Morphological Analyzer) bindings for standalone dart.
 The Flutter version of this package can be found [here](https://pub.dev/packages/mecab_for_flutter)
 
-[Try it out using flutter in the browser!](https://captaindario.github.io/mecab_for_dart/).
+[Try it out using flutter in the browser!](https://captaindario.github.io/mecab_for_flutter/).
 
 | Android | iOS | Windows | MacOS | Linux | Web | Web --wasm |
 |:-------:|:---:|:-------:|:-----:|:-----:|:---:|:----------:|
@@ -19,8 +19,8 @@ dependencies:
 
 ## Getting the binaries
 
-Pre-compiled binaries are provided for Linux (x86/arm64), Macos (x86/arm64) and Windows (x86/arm64), you can download them [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
-Download the one you need and place them somwhere your data application can access them, in this README that path will be donated by <LIB_MECAB_PATH>
+Pre-compiled binaries are provided for Linux (arm64), Macos (x86/arm64) and Windows (x86/arm64), you can download them [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
+Download the one you need and place them somwhere your data application can access them, in this README that path will be called <LIB_MECAB_PATH>
 
 ## Getting a dictionary
 
