@@ -2,7 +2,10 @@
 
 ## 1.1.4
 
-* Updated Changelog
+* Updated
+  * CHANGELOG
+  * README
+* Added example
 
 ## 1.1.3
 

@@ -11,7 +11,8 @@ The Flutter version of this package can be found [here](https://pub.dev/packages
 
 ## Installation
 
-1. Add this plug_in as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+1. Add this plug in as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
 ```yaml
 dependencies:   
    mecab_for_dart: <your_version> 
@@ -20,12 +21,12 @@ dependencies:
 ## Getting the binaries
 
 Pre-compiled binaries are provided for Linux (arm64), Macos (x86/arm64) and Windows (x86/arm64), you can download them [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
-Download the one you need and place them somwhere your data application can access them, in this README that path will be called <LIB_MECAB_PATH>
+Download the one you need and place them somwhere your dart application can access them, in this README that path will be called `<LIB_MECAB_PATH>`
 
 ## Getting a dictionary
 
 Any dictionary that is compatible with mecab will work, but for ease of getting started, a copy of ipadic and unidic is provided [here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
-Download the one you need and place them somwhere your data application can access them, in this README that path will be donated by <DICT_MECAB_PATH>
+Download the one you need and place them somewhere your dart application can access them, in this README that path will be donated by `<DICT_MECAB_PATH>`
 
 ## Example
 
@@ -36,8 +37,8 @@ var tagger = new Mecab();
 await tagger.init("<LIB_MECAB_PATH>", "<DICT_MECAB_PATH>", true);
 ```
 
-Set the boolean option in `init` function to true if you want to get the tokens including features,
-set it to false if you only want the token surfaces.
+Set the boolean option in `init` function to `true` if you want to get the tokens including features,
+set it to `false` if you only want the token surfaces.
 
 Use the tagger to parse text:
 
@@ -92,7 +93,7 @@ After the build process finished, there should be a `libmecab.dll` in `windows/s
 
 ### Android / iOS
 
-As dart is not really available for running on iOS / Android there are no precompiled binaries or build scripts available.
+As dart is not really useed for running on iOS / Android there are no precompiled binaries or build scripts available.
 If you see a need for this please open an issue or PR!
 
 ### Web
