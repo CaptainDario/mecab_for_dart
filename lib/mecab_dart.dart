@@ -1,3 +1,5 @@
+export 'token_node.dart';
+
 // Package imports:
 import 'package:universal_ffi/ffi_utils.dart' as ffi;
 
