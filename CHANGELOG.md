@@ -1,4 +1,8 @@
-# Mecab dart plus
+# Mecab for dart
+
+## 1.1.4
+
+* Updated Changelog
 
 ## 1.1.3
 
