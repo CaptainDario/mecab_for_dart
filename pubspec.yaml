@@ -6,7 +6,7 @@ homepage:
 funding:
   - https://github.com/sponsors/CaptainDario
   - https://buymeacoffee.com/dariyooo
-  - https://www.patreon.com/DaAppLab
+  - https://patreon.com/DaAppLab
 
 environment:
   sdk: '>=2.12.0 <4.0.0'
