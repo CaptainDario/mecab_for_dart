@@ -1,5 +1,9 @@
 # Mecab for dart
 
+## 1.1.5
+
+* Export `TokeNode`
+
 ## 1.1.4
 
 * Updated
