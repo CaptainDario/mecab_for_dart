@@ -32,3 +32,9 @@ example/blobs/*
 # testing assets
 test/**
 !test/mecab_for_data_test.dart
+
+# wasm
+example/assets/**
+!example/assets/.gitkeep
+emcc_out/**
+!emcc_out/.gitkeep
