@@ -1,5 +1,10 @@
 # Mecab for dart
 
+## 1.1.6
+
+* Bump package versions
+* Expose: `libmecabPath`, `mecabDictDirPath`
+
 ## 1.1.5
 
 * Export `TokeNode`
