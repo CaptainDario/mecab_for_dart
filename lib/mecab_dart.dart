@@ -13,6 +13,10 @@ class Mecab {
 
   /// Pointer to the Mecab instance on the C side
   late final MecabDartFfi mecabDartFfi;
+  /// Path to the Mecab dynamic library used
+  String? libmecabPath;
+  /// Path to the Mecab dictionary directory used
+  String? mecabDictDirPath;
 
 
   /// Initializes this mecab instance,
@@ -33,6 +37,9 @@ class Mecab {
       mecabDartFfi.mecabPtr = mecabDartFfi.initMecabFfi(
         options.toNativeUtf8(), dictDir.toNativeUtf8());
     });
+
+    libmecabPath = libmecabPath;
+    mecabDictDirPath = dictDir;
     
   }
 
