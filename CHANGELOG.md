@@ -1,5 +1,9 @@
 # Mecab for dart
 
+## 1.1.7
+
+* Fixed: `libmecabPath` not correctly set
+
 ## 1.1.6
 
 * Bump package versions

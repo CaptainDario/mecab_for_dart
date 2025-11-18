@@ -38,8 +38,8 @@ class Mecab {
         options.toNativeUtf8(), dictDir.toNativeUtf8());
     });
 
-    libmecabPath = libmecabPath;
-    mecabDictDirPath = dictDir;
+    this.libmecabPath = libmecabPath;
+    this.mecabDictDirPath = dictDir;
     
   }
 
