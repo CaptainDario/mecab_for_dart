@@ -1,5 +1,10 @@
 # Mecab for dart
 
+## 1.3.0
+
+* Transferable is now a class
+* Made transferable state factory async
+
 ## 1.2.0
 
 * Unified flutter and dart package: no `init_flutter` anymore
