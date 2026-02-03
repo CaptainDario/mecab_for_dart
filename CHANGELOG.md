@@ -1,5 +1,10 @@
 # Mecab for dart
 
+## 1.2.0
+
+* Unified flutter and dart package: no `init_flutter` anymore
+* Added isolate serialization method
+
 ## 1.1.7
 
 * Fixed: `libmecabPath` not correctly set
