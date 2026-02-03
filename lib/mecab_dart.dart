@@ -45,17 +45,17 @@ class Mecab {
   Future<void> init(String? libmecabPath, String dictDir, bool includeFeatures) async {
   
     var options = includeFeatures ? "" : "-Owakati";
-    mecabDartFfi = MecabDartFfi();
+    _mecabDartFfi = MecabDartFfi();
     
     if(libmecabPath != null){
-      await mecabDartFfi.init(libmecabPath: libmecabPath);
+      await _mecabDartFfi.init(libmecabPath: libmecabPath);
     }
     else{
-      await mecabDartFfi.init(mecabFfiHelper: await loadMecabDartLib());
+      await _mecabDartFfi.init(mecabFfiHelper: await loadMecabDartLib());
     }
 
-    mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
-      mecabDartFfi.mecabPtr = mecabDartFfi.initMecabFfi(
+    _mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
+      _mecabDartFfi.mecabPtr = _mecabDartFfi.initMecabFfi(
         options.toNativeUtf8(), dictDir.toNativeUtf8());
     });
 
@@ -71,7 +71,7 @@ class Mecab {
     var resultStr = "";
 
     resultStr =
-      (mecabDartFfi.parseFfi(mecabDartFfi.mecabPtr!, input.toNativeUtf8()))
+      (_mecabDartFfi.parseFfi(_mecabDartFfi.mecabPtr!, input.toNativeUtf8()))
       .toDartString().trim();
 
     List<String> items;
@@ -91,8 +91,8 @@ class Mecab {
 
   /// Frees the memory used by mecab and 
   void destroy() {
-    if (mecabDartFfi.mecabPtr != null) {
-      mecabDartFfi.destroyMecabFfi(mecabDartFfi.mecabPtr!);
+    if (_mecabDartFfi.mecabPtr != null) {
+      _mecabDartFfi.destroyMecabFfi(_mecabDartFfi.mecabPtr!);
     }
   }
 
