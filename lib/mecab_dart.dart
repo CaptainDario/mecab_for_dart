@@ -1,6 +1,7 @@
 export 'token_node.dart';
 
 // Package imports:
+import 'package:mecab_for_dart/lib_mecab.dart';
 import 'package:universal_ffi/ffi_utils.dart' as ffi;
 
 // Project imports:
@@ -14,24 +15,42 @@ class Mecab {
   /// Pointer to the Mecab instance on the C side
   late final MecabDartFfi mecabDartFfi;
   /// Path to the Mecab dynamic library used
-  String? libmecabPath;
+  late final String? libmecabPath;
   /// Path to the Mecab dictionary directory used
-  String? mecabDictDirPath;
+  late final String mecabDictDirPath;
+  /// Whether to include token features in the output
+  late final bool includeFeatures;
 
+  Map<String, dynamic>? get transferableState => {
+    "libmecabPath": libmecabPath,
+    "mecabDictDirPath": mecabDictDirPath,
+    "includeFeatures": includeFeatures,
+  };
+
+  Mecab();
 
   /// Initializes this mecab instance,
   /// `libmecabPath` should be the path to a mecab dynamic library
+  ///                Note: when using this package in Flutter, this parameter
+  ///                can be null, and the library will be loaded from the 
+  ///                package's compiled mecab dynamic library.
   /// `dictDir` should be a directory that contains a Mecab dictionary
   /// (ex. IpaDic) 
   /// If `includeFeatures` is set, the output of mecab includes the
   /// token-features.
   /// 
   /// Warning: This method needs to be called before any other method
-  Future<void> init(String libmecabPath, String dictDir, bool includeFeatures) async {
+  Future<void> init(String? libmecabPath, String dictDir, bool includeFeatures) async {
   
     var options = includeFeatures ? "" : "-Owakati";
     mecabDartFfi = MecabDartFfi();
-    await mecabDartFfi.init(libmecabPath: libmecabPath);
+    
+    if(libmecabPath != null){
+      await mecabDartFfi.init(libmecabPath: libmecabPath);
+    }
+    else{
+      await mecabDartFfi.init(mecabFfiHelper: await loadMecabDartLib());
+    }
 
     mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
       mecabDartFfi.mecabPtr = mecabDartFfi.initMecabFfi(
@@ -40,6 +59,7 @@ class Mecab {
 
     this.libmecabPath = libmecabPath;
     this.mecabDictDirPath = dictDir;
+    this.includeFeatures = includeFeatures;
     
   }
 
@@ -72,6 +92,14 @@ class Mecab {
     if (mecabDartFfi.mecabPtr != null) {
       mecabDartFfi.destroyMecabFfi(mecabDartFfi.mecabPtr!);
     }
+  }
+
+  Mecab.fromTransferableState(Map<String, dynamic> state) {
+    String? libmecabPath = state["libmecabPath"];
+    String mecabDictDirPath = state["mecabDictDirPath"];
+    bool includeFeatures = state["includeFeatures"];
+
+    init(libmecabPath, mecabDictDirPath, includeFeatures);
   }
 
 }
