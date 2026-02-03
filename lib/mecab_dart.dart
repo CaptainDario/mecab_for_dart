@@ -1,7 +1,9 @@
 export 'token_node.dart';
+export 'mecab_transferable_state.dart';
 
 // Package imports:
 import 'package:mecab_for_dart/lib_mecab.dart';
+import 'package:mecab_for_dart/mecab_transferable_state.dart';
 import 'package:universal_ffi/ffi_utils.dart' as ffi;
 
 // Project imports:
@@ -13,7 +15,7 @@ class Mecab {
 
 
   /// Pointer to the Mecab instance on the C side
-  late final MecabDartFfi mecabDartFfi;
+  late final MecabDartFfi _mecabDartFfi;
   /// Path to the Mecab dynamic library used
   late final String? libmecabPath;
   /// Path to the Mecab dictionary directory used
@@ -21,11 +23,11 @@ class Mecab {
   /// Whether to include token features in the output
   late final bool includeFeatures;
 
-  Map<String, dynamic>? get transferableState => {
-    "libmecabPath": libmecabPath,
-    "mecabDictDirPath": mecabDictDirPath,
-    "includeFeatures": includeFeatures,
-  };
+  MecabTransferableState get transferableState => MecabTransferableState(
+    libmecabPath: libmecabPath,
+    mecabDictDirPath: mecabDictDirPath,
+    includeFeatures: includeFeatures,
+  );
 
   Mecab();
 
@@ -94,12 +96,16 @@ class Mecab {
     }
   }
 
-  Mecab.fromTransferableState(Map<String, dynamic> state) {
-    String? libmecabPath = state["libmecabPath"];
-    String mecabDictDirPath = state["mecabDictDirPath"];
-    bool includeFeatures = state["includeFeatures"];
+  Future<Mecab> fromTransferableState(MecabTransferableState state) async {
+    final m = Mecab();
+    m.init(
+      state.libmecabPath,
+      state.mecabDictDirPath,
+      state.includeFeatures,
+    );
 
-    init(libmecabPath, mecabDictDirPath, includeFeatures);
+    return m;
   }
 
 }
+
