@@ -1,6 +1,6 @@
 name: mecab_for_dart
 description: Dart plugin which provides binding to Mecab library (Japanese Morphological Analyzer)
-version: 1.3.0
+version: 2.0.0
 homepage:
   https://github.com/captaindario/mecab_for_dart
 funding:
@@ -9,7 +9,7 @@ funding:
   - https://patreon.com/DaAppLab
 
 environment:
-  sdk: '>=2.16.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   universal_ffi: ^1.1.0
