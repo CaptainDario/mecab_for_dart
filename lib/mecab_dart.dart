@@ -52,10 +52,10 @@ class Mecab {
 
     instance._mecabDartFfi = MecabDartFfi();
     
-    if(libmecabPath != null){
+    if(libmecabPath != null) {
       await instance._mecabDartFfi.init(libmecabPath: libmecabPath);
     }
-    else{
+    else {
       await instance._mecabDartFfi.init(mecabFfiHelper: await loadMecabDartLib());
     }
 
@@ -63,8 +63,8 @@ class Mecab {
       final optionsPtr = options.toNativeUtf8(allocator: arena);
       final dictDirPtr = dictDir.toNativeUtf8(allocator: arena);
       final libPathPtr = libmecabPath != null 
-          ? libmecabPath.toNativeUtf8(allocator: arena) 
-          : nullptr;
+        ? libmecabPath.toNativeUtf8(allocator: arena) 
+        : nullptr;
 
       instance._mecabPtr = instance._mecabDartFfi.initMecabFfi(
         optionsPtr, dictDirPtr, libPathPtr);
@@ -88,7 +88,7 @@ class Mecab {
   /// Parses the given text using mecab and returns the raw string output.
   String rawParse(String input) {
     if (_mecabPtr == null || _mecabPtr!.address == 0) {
-       throw Exception("Mecab instance is disposed or invalid.");
+      throw Exception("Mecab instance is disposed or invalid.");
     }
 
     var resultStr = "";
