@@ -14,7 +14,7 @@ struct ModelEntry {
     int refCount;
 };
 
-// Maps a unique key ("lib|dict") to a shared ModelEntry.
+// Maps a unique key ("lib|dict|opt") to a shared ModelEntry.
 static std::map<std::string, ModelEntry> model_registry;
 
 // Maps a specific Tagger instance back to its Model key.
@@ -23,9 +23,12 @@ static std::map<void*, std::string> tagger_registry;
 
 static std::mutex registry_mutex;
 
-// Generates the registry key: "libpath|dicdir"
-std::string get_registry_key(const char* dicdir, const char* libpath) {
-    return std::string(libpath ? libpath : "default") + "|" + std::string(dicdir);
+// Generates the registry key: "libpath|dicdir|opt"
+std::string get_registry_key(const char* dicdir, const char* libpath, const char* opt) {
+    std::string s_lib = libpath ? libpath : "default";
+    std::string s_dic = dicdir ? dicdir : "";
+    std::string s_opt = opt ? opt : "";
+    return s_lib + "|" + s_dic + "|" + s_opt;
 }
 
 // Parses options string. Returns vector<string> by value to ensure 
@@ -51,10 +54,10 @@ extern "C" __attribute__((visibility("default"))) __attribute__((used))
 void* initMecab(const char* opt, const char* dicdir, const char* libpath) {
     std::lock_guard<std::mutex> lock(registry_mutex);
     
-    std::string key = get_registry_key(dicdir, libpath);
+    std::string key = get_registry_key(dicdir, libpath, opt);
     mecab_model_t* model = nullptr;
 
-    // Check if a model for this dictionary already exists
+    // Check if a model for this configuration already exists
     auto it = model_registry.find(key);
     if (it != model_registry.end()) {
         // Reuse existing model, increment ref count
