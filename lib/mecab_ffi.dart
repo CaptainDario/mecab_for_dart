@@ -3,67 +3,64 @@ import 'package:universal_ffi/ffi.dart';
 import 'package:universal_ffi/ffi_helper.dart';
 import 'package:universal_ffi/ffi_utils.dart';
 
+// --- Typedefs ---
+
+// Init (Returns Tagger)
+typedef InitMecabFuncC = Pointer<Void> Function(Pointer<Utf8> opt, Pointer<Utf8> dicdir, Pointer<Utf8> libpath);
+typedef InitMecabFuncDart = Pointer<Void> Function(Pointer<Utf8> opt, Pointer<Utf8> dicdir, Pointer<Utf8> libpath);
+
+// Destroy (Takes Tagger)
+typedef DestroyMecabFuncC = Void Function(Pointer<Void> tagger);
+typedef DestroyMecabFuncDart = void Function(Pointer<Void> tagger);
+
+// Parse
+typedef ParseFuncC = Pointer<Utf8> Function(Pointer<Void> tagger, Pointer<Utf8> input);
+typedef ParseFuncDart = Pointer<Utf8> Function(Pointer<Void> tagger, Pointer<Utf8> input);
+
+// Test
+typedef NativeAddFuncC = Int32 Function(Int32 x, Int32 y);
+typedef NativeAddFuncDart = int Function(int x, int y);
 
 
-typedef InitMecabFunc = Pointer<Void> Function(
-  Pointer<Utf8> options, Pointer<Utf8> dicdir);
-typedef ParseFunc = Pointer<Utf8> Function(
-  Pointer<Void> m, Pointer<Utf8> input);
-typedef DestroyMecabFunc = Void Function(Pointer<Void> mecab);
-typedef DestroyMecabFuncC = void Function(Pointer<Void> mecab);
-typedef NativeAddFunc = void Function(Pointer<Void> mecab);
-
-/// Class that contains all Mecab FFi things
+/// Class that contains all Mecab FFi references
 class MecabDartFfi {
 
   late final FfiHelper mecabDartFfiHelper;
 
-  late final Pointer<Void>? mecabPtr;
-
-  late final Pointer<NativeFunction<InitMecabFunc>> initMecabPointer;
-  late final InitMecabFunc initMecabFfi;
-
-  late final Pointer<NativeFunction<ParseFunc>> parsePointer;
-  late final ParseFunc parseFfi;
-  
-  late final Pointer<NativeFunction<DestroyMecabFunc>> destroyMecabPointer;
-  late final DestroyMecabFuncC destroyMecabFfi;
-
-  late final int Function(int x, int y) nativeAddFunc;
+  late final InitMecabFuncDart initMecabFfi;
+  late final DestroyMecabFuncDart destroyMecabFfi;
+  late final ParseFuncDart parseFfi;
+  late final NativeAddFuncDart nativeAddFunc;
 
 
   /// Initializes the communication to ffi
   Future<void> init({String? libmecabPath, FfiHelper? mecabFfiHelper}) async {
 
-    if(libmecabPath == null && mecabFfiHelper == null){
+    if (libmecabPath == null && mecabFfiHelper == null) {
       throw ArgumentError("Not **both** `libmecabPath` and `mecabFfiHelper` can be null!");
     }
-    if(libmecabPath != null) {
+
+    if (mecabFfiHelper != null) {
+      mecabDartFfiHelper = mecabFfiHelper;
+    } else if (libmecabPath != null) {
       mecabDartFfiHelper = await FfiHelper.load(libmecabPath);
     }
-    if(mecabFfiHelper != null) {
-      mecabDartFfiHelper = mecabFfiHelper;
-    }
 
-    initMecabPointer = mecabDartFfiHelper.library
-      .lookup<NativeFunction<InitMecabFunc>>('initMecab');
-    initMecabFfi = initMecabPointer.asFunction<InitMecabFunc>();
+    // Lookup functions
+    initMecabFfi = mecabDartFfiHelper.library
+      .lookup<NativeFunction<InitMecabFuncC>>('initMecab')
+      .asFunction<InitMecabFuncDart>();
+      
+    destroyMecabFfi = mecabDartFfiHelper.library
+      .lookup<NativeFunction<DestroyMecabFuncC>>('destroyMecab')
+      .asFunction<DestroyMecabFuncDart>();
 
-    parsePointer = mecabDartFfiHelper.library
-      .lookup<NativeFunction<ParseFunc>>('parse');
-    parseFfi = parsePointer.asFunction<ParseFunc>();
-
-    destroyMecabPointer = mecabDartFfiHelper.library
-      .lookup<NativeFunction<DestroyMecabFunc>>('destroyMecab');
-    destroyMecabFfi = destroyMecabPointer.asFunction<DestroyMecabFuncC>();
+    parseFfi = mecabDartFfiHelper.library
+      .lookup<NativeFunction<ParseFuncC>>('parse')
+      .asFunction<ParseFuncDart>();
 
     nativeAddFunc = mecabDartFfiHelper.library
-      .lookup<NativeFunction<Int32 Function(Int32, Int32)>>('native_add')
-      .asFunction();
-
+      .lookup<NativeFunction<NativeAddFuncC>>('native_add')
+      .asFunction<NativeAddFuncDart>();
   }
-
 }
-
-
-
