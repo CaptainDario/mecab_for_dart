@@ -9,6 +9,7 @@ The Flutter version of this package can be found [here](https://pub.dev/packages
 |:-------:|:---:|:-------:|:-----:|:-----:|:---:|:----------:|
 |    ✅    |  ✅  |    ✅    |   ✅   |   ✅   |  ✅  |      [❌](https://github.com/CaptainDario/mecab_for_dart/issues/5)     |
 
+
 ## Installation
 
 1. Add this plug in as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
@@ -18,28 +19,27 @@ dependencies:
    mecab_for_dart: <your_version> 
 ```
 
-## Getting the binaries
+### Getting the binaries
 
 Pre-compiled binaries are provided for Linux (arm64), Macos (x86/arm64) and Windows (x86/arm64), you can [download them here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
 Download the one you need and place them somewhere your dart application can access them, in this README that path will be called `<LIB_MECAB_PATH>`
 
-## Getting a dictionary
+### Getting a dictionary
 
 Any dictionary that is compatible with MeCab will work, but for ease of getting started, a copy of `ipadic` and `unidic` [can be downloaded here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data) (but you need to assure that the dictionary has `mecabrc` file).
 Download the one you need and place them somewhere your dart application can access them, in this README that path will be donated by `<DICT_MECAB_PATH>`
 
-## Example
+## Usage
 
 Init Mecab:
 
 ```dart
-var tagger = await Mecab.create("<LIB_MECAB_PATH>", "<DICT_MECAB_PATH>", "<YOUR_OPTIONS>");
+var tagger = await Mecab.create("<LIB_MECAB_PATH>", "<DICT_MECAB_PATH>", "<YOUR_MECAB_OPTIONS>");
 ```
 
-Set the boolean option in `init` function to `true` if you want to get the tokens including features,
-set it to `false` if you only want the token surfaces.
+(the options can be used to configure mecab.)
 
-Use the tagger to parse text:
+Then use the tagger to parse text:
 
 ```dart
 var tokens = tagger.parse('にわにわにわにわとりがいる。');
@@ -62,6 +62,30 @@ for(var token in tokens) {
 This library tries to load the MeCab dictionary from the WASM file system.
 The easiest way to get the dictionary in it, is by bundling it when compiling MeCab to WASM.
 However, it may be desirable to swap dictionaries. To do this, you need to load the dictionary into libmecab's WASM memory.
+
+### Isolate usage
+
+This library is safe to use across isolates, but the `Mecab` class itself cannot be passed across isolates.
+You need to send its state and then instantiate a new instance from that state.
+
+```dart
+// in the main isolate
+final var state = mecab.transferableState;
+
+// send the state to the isolate
+// ...
+
+// in the isolate
+// ... receive the state
+final Mecab m = await Mecab.fromTransferableState(state);
+```
+
+The native c++ code takes care of your differen mecab setups and only loads the heavy dictionary into memory once (per configuration).
+
+### Mecab Options usage
+
+You can pass any options when creating a new mecab instance.
+But be aware that not every output format is supported by `parse()`, you may need to switch to `rawParse()` and then parse the string output yourself.
 
 ## Building the binaries
 
