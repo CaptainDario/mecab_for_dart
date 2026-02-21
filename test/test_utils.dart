@@ -10,8 +10,6 @@ String currentMemoryUsageString() {
   return (ProcessInfo.currentRss / 1024 / 1024).toStringAsFixed(2);
 }
 
-
-
 /// Finds the root directory of the project by looking for pubspec.yaml.
 String getProjectRoot() {
   Directory current = Directory.current;

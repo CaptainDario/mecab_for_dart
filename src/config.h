@@ -1,48 +1,45 @@
+#ifndef MECAB_CONFIG_H
+#define MECAB_CONFIG_H
 
-/* Define to 1 if you have the <dirent.h> header file. */
-#define HAVE_DIRENT_H 1
-
-/* Define to 1 if you have the <fcntl.h> header file. */
-#define HAVE_FCNTL_H 1
-
-/* Define to 1 if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
-
-/* Define to 1 if you have the <string.h> header file. */
-#define HAVE_STRING_H 1
-
-/* Define to 1 if you have the <sys/stat.h> header file. */
-#define HAVE_SYS_STAT_H 1
-
-/* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
-
-/* Name of package */
+/* --- Package Information --- */
 #define PACKAGE "mecab"
+#define VERSION "0.996"
+#define DIC_VERSION 102
 
-/* Default rcfile */
-#define MECAB_DEFAULT_RC "mecabrc"
+/* --- Windows (MSVC) Specific Configuration --- */
+#if defined(_WIN32) || defined(_WIN64)
+    #define HAVE_WINDOWS_H 1
+    #define HAVE_GETENV 1
+    #define MECAB_USE_THREAD 1
+    #define DLL_EXPORT 1
+    
+    /* Standard Windows paths for mecabrc */
+    #ifndef MECAB_DEFAULT_RC
+        #define MECAB_DEFAULT_RC "mecabrc"
+    #endif
 
-/* The size of `char', as computed by sizeof. */
-#define SIZEOF_CHAR 1
+    /* Security fixes for MSVC */
+    #define _CRT_SECURE_NO_DEPRECATE 1
+    #define _CRT_SECURE_NO_WARNINGS
 
-/* The size of `int', as computed by sizeof. */
-#define SIZEOF_INT 4
+/* --- Unix/Android/iOS (GCC/Clang) Specific Configuration --- */
+#else
+    #define HAVE_DIRENT_H 1
+    #define HAVE_UNISTD_H 1
+    #define HAVE_FCNTL_H 1
+    #define HAVE_SYS_STAT_H 1
+    #define HAVE_GETENV 1
+    #define MECAB_USE_THREAD 1
+    
+    #ifndef MECAB_DEFAULT_RC
+        #define MECAB_DEFAULT_RC "mecabrc"
+    #endif
 
-/* The size of `long', as computed by sizeof. */
-#define SIZEOF_LONG 8
+#endif
 
-/* The size of `long long', as computed by sizeof. */
-#define SIZEOF_LONG_LONG 8
-
-/* The size of `short', as computed by sizeof. */
-#define SIZEOF_SHORT 2
-
-/* The size of `size_t', as computed by sizeof. */
-#define SIZEOF_SIZE_T 8
-
-/* Define to 1 if you have the ANSI C header files. */
+/* --- Common Headers (Found on almost all modern platforms) --- */
+#define HAVE_STDINT_H 1
+#define HAVE_STRING_H 1
 #define STDC_HEADERS 1
 
-/* Version number of package */
-#define VERSION "0.996"
+#endif /* MECAB_CONFIG_H */
