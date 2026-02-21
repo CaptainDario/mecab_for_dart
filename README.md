@@ -19,14 +19,9 @@ dependencies:
    mecab_for_dart: <your_version> 
 ```
 
-### Getting the binaries
-
-Pre-compiled binaries are provided for Linux (arm64), Macos (x86/arm64) and Windows (x86/arm64), you can [download them here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data).
-Download the one you need and place them somewhere your dart application can access them, in this README that path will be called `<LIB_MECAB_PATH>`
-
 ### Getting a dictionary
 
-Any dictionary that is compatible with MeCab will work, but for ease of getting started, a copy of `ipadic` and `unidic` [can be downloaded here](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data) (but you need to assure that the dictionary has `mecabrc` file).
+Any dictionary that is compatible with MeCab will work, but for ease of getting started, a copy of `ipadic` and `unidic` [can be downloaded in the release section of this repo](https://github.com/CaptainDario/mecab_for_dart/releases/tag/data) (if you use your own, you need to assure that the dictionary has `mecabrc` file).
 Download the one you need and place them somewhere your dart application can access them, in this README that path will be donated by `<DICT_MECAB_PATH>`
 
 ## Usage
@@ -34,10 +29,12 @@ Download the one you need and place them somewhere your dart application can acc
 Init Mecab:
 
 ```dart
-var tagger = await Mecab.create("<LIB_MECAB_PATH>", "<DICT_MECAB_PATH>", "<YOUR_MECAB_OPTIONS>");
+var tagger = await Mecab.create(
+  dictDir: "<DICT_MECAB_PATH>", // the path to you dictionary
+  options: "<YOUR_MECAB_OPTIONS>", // options you want mecab to use, ex.: "-Owakati"
+  webLibmecabPath: "<LIB_MECAB_PATH>" // path where your wasm files are
+);
 ```
-
-(the options can be used to configure mecab.)
 
 Then use the tagger to parse text:
 
@@ -87,7 +84,13 @@ The native c++ code takes care of your differen mecab setups and only loads the 
 You can pass any options when creating a new mecab instance.
 But be aware that not every output format is supported by `parse()`, you may need to switch to `rawParse()` and then parse the string output yourself.
 
-## Building the binaries
+## Building binaries
+
+<details>
+
+<summary>Details...</summary>
+
+If you desire to compile a mecab library you can do it like this:
 
 ### Linux
 
@@ -129,3 +132,5 @@ Then, a WASM binary can be compiled by running `compile_wasm_bare.sh` (no dictio
 This will generate `libmecab.js` and `libmecab.wasm` in the folder `emcc_out/`.
 Those files then need to be loaded by your application.
 For more details, see the example in the Flutter package.
+
+</details>
