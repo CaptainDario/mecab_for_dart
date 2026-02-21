@@ -2,14 +2,13 @@ export 'token_node.dart';
 export 'mecab_transferable_state.dart';
 
 // Package imports:
-import 'package:mecab_for_dart/lib_mecab.dart';
 import 'package:mecab_for_dart/mecab_transferable_state.dart';
-import 'package:universal_ffi/ffi.dart';
-import 'package:universal_ffi/ffi_utils.dart' as ffi;
 
 // Project imports:
 import 'mecab_ffi.dart';
 import 'token_node.dart';
+
+
 
 /// Class that represents a Mecab Tagger instance
 class Mecab {
@@ -17,17 +16,19 @@ class Mecab {
   /// Pointer to the Mecab instance on the C side
   late final MecabDartFfi _mecabDartFfi;
 
-  Pointer<Void>? _mecabPtr;
+  // We use dynamic here because dart:ffi Pointer<Void> and 
+  // universal_ffi Pointer<Void> are technically different types to the analyzer.
+  dynamic _mecabPtr;
 
   /// Path to the Mecab dynamic library used
-  late final String? libmecabPath;
+  late final String? weblibmecabPath;
   /// Path to the Mecab dictionary directory used
   late final String mecabDictDirPath;
   /// Whether to include token features in the output
   late final String options;
 
   MecabTransferableState get transferableState => MecabTransferableState(
-    libmecabPath: libmecabPath,
+    libmecabPath: weblibmecabPath,
     mecabDictDirPath: mecabDictDirPath,
     options: options,
   );
@@ -35,50 +36,38 @@ class Mecab {
   Mecab._internal();
 
   /// Initializes this mecab instance,
-  /// `libmecabPath` should be the path to a mecab dynamic library
-  ///                Note: when using this package in Flutter, this parameter
-  ///                can be null, and the library will be loaded from the 
-  ///                package's compiled mecab dynamic library.
   /// `dictDir` should be a directory that contains a Mecab dictionary
-  /// (ex. IpaDic) 
+  ///           (ex. IpaDic) 
   /// `options` can be used 
-  static Future<Mecab> create(
-    String? libmecabPath,
-    String dictDir,
-    String options
-  ) async {
+  /// `libmecabPath` only used on web, sets the path where the Mecab WASM binary
+  ///                is located.
+  static Future<Mecab> create({
+    required String dictDir,
+    String options = "",
+    String? webLibmecabPath,
+    
+  }) async {
   
     final instance = Mecab._internal();
-
     instance._mecabDartFfi = MecabDartFfi();
     
-    if(libmecabPath != null) {
-      await instance._mecabDartFfi.init(libmecabPath: libmecabPath);
-    }
-    else {
-      await instance._mecabDartFfi.init(mecabFfiHelper: await loadMecabDartLib());
-    }
+    // Delegate ALL initialization logic to the FFI classes.
+    // On Native: This does nothing (Native Assets links it automatically).
+    // On Web: The web FFI class internally calls loadMecabDartLib().
+    await instance._mecabDartFfi.init(libmecabPath: webLibmecabPath);
 
-    instance._mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
-      final optionsPtr = options.toNativeUtf8(allocator: arena);
-      final dictDirPtr = dictDir.toNativeUtf8(allocator: arena);
-      final libPathPtr = libmecabPath != null 
-        ? libmecabPath.toNativeUtf8(allocator: arena) 
-        : nullptr;
-
-      instance._mecabPtr = instance._mecabDartFfi.initMecabFfi(
-        optionsPtr, dictDirPtr, libPathPtr);
-    });
+    // Initialize the C++ pointer
+    instance._mecabPtr = instance._mecabDartFfi.initMecabString(options, dictDir, webLibmecabPath);
 
     // Check if initialization failed
     try {
       instance._mecabDartFfi.nativeAddFunc(1, 2);
     }
     catch (e) {
-      throw Exception("Failed to initialize Mecab. Check your dictionary path: '$dictDir' and library path: '$libmecabPath'. Error details: $e");
+      throw Exception("Failed to initialize Mecab. Check your dictionary path: '$dictDir' and library path: '$webLibmecabPath'. Error details: $e");
     }
 
-    instance.libmecabPath = libmecabPath;
+    instance.weblibmecabPath = webLibmecabPath;
     instance.mecabDictDirPath = dictDir;
     instance.options = options;
 
@@ -87,20 +76,10 @@ class Mecab {
 
   /// Parses the given text using mecab and returns the raw string output.
   String rawParse(String input) {
-    if (_mecabPtr == null || _mecabPtr!.address == 0) {
+    if (_mecabPtr == null) 
       throw Exception("Mecab instance is disposed or invalid.");
-    }
 
-    var resultStr = "";
-
-    // safeUsing handles the freeing of the input string pointer
-    _mecabDartFfi.mecabDartFfiHelper.safeUsing((ffi.Arena arena) {
-      resultStr =
-        (_mecabDartFfi.parseFfi(_mecabPtr!, input.toNativeUtf8(allocator: arena)))
-        .toDartString().trim();
-    });
-
-    return resultStr;
+    return _mecabDartFfi.parseString(_mecabPtr, input).trim();
   }
 
   /// Parses the given text using mecab and returns parsed [TokenNode]s
@@ -131,15 +110,18 @@ class Mecab {
   }
 
   void dispose() {
-    if (_mecabPtr != null && _mecabPtr!.address != 0) {
-      _mecabDartFfi.destroyMecabFfi(_mecabPtr!);
+    if (_mecabPtr != null) {
+      _mecabDartFfi.destroyMecabFfi(_mecabPtr);
       _mecabPtr = null;
     }
   }
 
   static Future<Mecab> fromTransferableState(MecabTransferableState state) async {
     return await Mecab.create(
-      state.libmecabPath, state.mecabDictDirPath, state.options);
+      dictDir: state.mecabDictDirPath,
+      options: state.options,
+      webLibmecabPath: state.libmecabPath,
+    );
   }
 
 }

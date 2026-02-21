@@ -30,8 +30,8 @@ example/blobs/*
 !example/blobs/.gitkeep
 
 # testing assets
-test/**
-!test/mecab_for_data_test.dart
+assets/**
+!assets/.gitkeep
 
 # wasm
 example/assets/**

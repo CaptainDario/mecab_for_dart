@@ -1,31 +1,24 @@
-import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:mecab_for_dart/mecab_dart.dart';
 import 'package:test/test.dart';
 import 'dart:io';
+import 'package:path/path.dart' as path;
 
 import 'test_utils.dart';
 
 
 void main() {
 
-  // Determine the library name based on the OS
-  String libmecabName = "lib dir/mecab" + () {
-    if (Platform.isMacOS) return ".dylib";
-    else if (Platform.isLinux) return ".so";
-    else if (Platform.isWindows) return ".dll";
-    else throw UnsupportedError("Unsupported platform");
-  } ();
-
-  String ipadicDir = "ipa dic";
-  String unidicDir = "unidic";
+  final assetsPath = getAssetsPath();
+  String ipadicDir = path.join(assetsPath, 'ipa dic');
+  String unidicDir = path.join(assetsPath, 'unidic');
   
   test('test mecab for dart', () async {
     print(Directory.current);
     double preInitMemory = currentMemoryUsage();
     print("Memory usage before init: $preInitMemory MB");
-    final tagger = await Mecab.create(libmecabName, ipadicDir, "");
+    final tagger = await Mecab.create(dictDir: ipadicDir);
     double postInitMemory = currentMemoryUsage();
     print("Memory usage after init: $postInitMemory MB");
     expect(postInitMemory-10 > preInitMemory, true);
@@ -42,7 +35,7 @@ void main() {
 
   test('test mecab memory sharing across isolates', () async {
   // 1. Initialize in the main isolate
-    final mainTagger = await Mecab.create(libmecabName, ipadicDir, "");
+    final mainTagger = await Mecab.create(dictDir: ipadicDir);
     final stateJson = mainTagger.transferableState.toJson(); 
     
     // 2. Gather data from the isolate
@@ -76,9 +69,9 @@ void main() {
 test('test multiple dictionaries simultaneously', () async {
     // 1. Create taggers
     print("Memory usage before init: ${currentMemoryUsage()} MB");
-    final ipaTagger = await Mecab.create(libmecabName, ipadicDir, "");
+    final ipaTagger = await Mecab.create(dictDir: ipadicDir);
     print("Memory usage after IPA init: ${currentMemoryUsage()} MB");
-    final uniTagger = await Mecab.create(libmecabName, unidicDir, "");
+    final uniTagger = await Mecab.create(dictDir: unidicDir);
     print("Memory usage after UniDic init: ${currentMemoryUsage()} MB");
 
     const input = "図書館";
@@ -110,7 +103,7 @@ test('test multiple dictionaries simultaneously', () async {
       "リンゴヲタベル",
     ];
     for (int i = 0; i < options.length; i++) {
-      final tagger = await Mecab.create(libmecabName, ipadicDir, options[i]);
+      final tagger = await Mecab.create(dictDir: ipadicDir, options: options[i]);
 
       final output = tagger.rawParse("林檎を食べる");
       print("");
