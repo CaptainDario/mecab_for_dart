@@ -55,13 +55,15 @@ void main(List<String> args) async {
         'src/$platform/dictionary.cpp',
         'src/$platform/tagger.cpp',
         'src/$platform/writer.cpp',
-        'src/$platform/feature_index.cpp',
-        'src/$platform/dictionary_rewriter.cpp',
-        'src/$platform/dictionary_generator.cpp',
-        'src/$platform/dictionary_compiler.cpp',
-        'src/$platform/learner.cpp',
-        'src/$platform/learner_tagger.cpp',
-        'src/$platform/lbfgs.cpp',
+        if (input.config.code.targetOS == OS.windows) ...[
+          'src/$platform/feature_index.cpp',
+          'src/$platform/dictionary_rewriter.cpp',
+          'src/$platform/dictionary_generator.cpp',
+          'src/$platform/dictionary_compiler.cpp',
+          'src/$platform/learner.cpp',
+          'src/$platform/learner_tagger.cpp',
+          'src/$platform/lbfgs.cpp',
+        ]
       ],
     );
 
