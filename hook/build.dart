@@ -1,12 +1,15 @@
+import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
+import 'package:logging/logging.dart';
 import 'package:native_toolchain_c/native_toolchain_c.dart';
+import 'package:native_toolchain_c/src/cbuilder/run_cbuilder.dart';
+import 'package:native_toolchain_c/src/native_toolchain/android_ndk.dart';
 
 void main(List<String> args) async {
-  // 1. Changed 'config' to 'input' in the callback parameters
   await build(args, (input, output) async {
     final builder = CBuilder.library(
       name: 'mecab_dart',
-      assetName: 'mecab_ffi_native.dart', 
+      assetName: 'mecab_ffi_native.dart',
       language: Language.cpp,
       flags: ['-std=c++11'],
       sources: [
@@ -28,8 +31,40 @@ void main(List<String> args) async {
         'src/writer.cpp',
       ],
     );
-    
-    // 2. Pass 'input: input' instead of 'config: config'
+
     await builder.run(input: input, output: output);
+
+    // Only run the workaround for Android targets
+    if (input.config.code.targetOS == OS.android) {
+      await _bundleAndroidStdLib(input, output);
+    }
   });
+}
+
+/// Workaround for https://github.com/dart-lang/native/issues/2099
+/// Manually finds and bundles 'libc++_shared.so' from the Android NDK.
+Future<void> _bundleAndroidStdLib(BuildInput input, BuildOutputBuilder output) async {
+  final targetArchitecture = input.config.code.targetArchitecture;
+  
+  final aclang = await androidNdkClang.defaultResolver!.resolve(
+    logger: Logger(''),
+  );
+
+  for (final tool in aclang) {
+    if (tool.tool.name == 'Clang') {
+      final sysroot = tool.uri.resolve('../sysroot/').toFilePath();
+      final androidArch = RunCBuilder.androidNdkClangTargetFlags[targetArchitecture];
+      final libPath = '$sysroot/usr/lib/$androidArch/libc++_shared.so';
+
+      output.assets.code.add(
+        CodeAsset(
+          package: input.packageName,
+          name: 'libc++_shared.so',
+          file: Uri.file(libPath),
+          linkMode: DynamicLoadingBundled(),
+        ),
+      );
+      break;
+    }
+  }
 }
