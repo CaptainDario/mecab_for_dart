@@ -6,24 +6,17 @@
 
 build/
 
-# ignore windows build files
-windows/src/*.exe
-windows/src/*.obj
-windows/src/*.dll
-windows/src/*.a
-windows/src/*.lib
-windows/src/*.o
-windows/src/*.exp
-windows/src/*.def
-windows/src/*.pdb
-
-# ignore macos build files
-macos/Classes/*.o
-macos/Classes/*.dylib
-
-# ignore linux build files
-linux/*.o
-linux/*.so
+# ignore build files
+src/**/*.exe
+src/**/*.obj
+src/**/*.dll
+src/**/*.a
+src/**/*.lib
+src/**/*.o
+src/**/*.exp
+src/**/*.def
+src/**/*.pdb
+src/**/*.dylib
 
 # ignore mecab web binary
 example/blobs/*

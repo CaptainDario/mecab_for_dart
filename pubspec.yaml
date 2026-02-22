@@ -9,7 +9,7 @@ funding:
   - https://patreon.com/DaAppLab
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.10.0 <4.0.0'
 
 dependencies:
   universal_ffi: ^1.1.0

@@ -94,7 +94,7 @@ If you desire to compile a mecab library you can do it like this:
 ### Linux
 
 ```bash
-cd linux/
+cd src/unix
 # this builds for the architecture you are on
 make libmecab
 ```
@@ -102,7 +102,7 @@ make libmecab
 ### MacOS
 
 ```bash
-cd macos/Classes/
+cd src/unix/
 make libmecab
 
 # use rosetta on apple silicone to cross compile
@@ -112,7 +112,7 @@ arch -x86_64 make libmecab
 ### Windows
 
 Because MeCab uses NMAKE on Windows to compile, the MeCab DLL needs to be created separately.
-For this open a [**Developer Command Prompt**](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022) and change in the `windows/src` directory.
+For this open a [**Developer Command Prompt**](https://learn.microsoft.com/en-us/visualstudio/ide/reference/command-prompt-powershell?view=vs-2022) and change in the `src/windows` directory.
 In this directory execute `nmake -f  Makefile.x64.msvc` (compile on x86) or `nmake -f  Makefile.arm64.msvc` (compile on arm64).
 After the build process finished, there should be a `libmecab.dll` in `windows/src`.
 

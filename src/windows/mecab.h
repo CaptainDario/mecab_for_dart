@@ -363,11 +363,11 @@ extern "C" {
 #ifndef SWIG
   /* C interface */
 
-  MECAB_DLL_EXTERN void* initMecab(const char* opt, const char* dicdir);
+  MECAB_DLL_EXTERN void* initMecab(const char* opt, const char* dicdir, const char* libpath);
 
-  MECAB_DLL_EXTERN const char* parse(void* mecab, const char* input);
+  MECAB_DLL_EXTERN const char* parse(void* tagger_ptr, const char* input);
 
-  MECAB_DLL_EXTERN void destroyMecab(void* mecab);
+  MECAB_DLL_EXTERN void destroyMecab(void* tagger_ptr);
 
   MECAB_DLL_EXTERN int native_add(int x, int y);
 

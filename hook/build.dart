@@ -6,33 +6,74 @@ import 'package:native_toolchain_c/src/cbuilder/run_cbuilder.dart';
 import 'package:native_toolchain_c/src/native_toolchain/android_ndk.dart';
 
 void main(List<String> args) async {
+
   await build(args, (input, output) async {
+
+    String platform = input.config.code.targetOS == OS.windows ? "windows" : "unix";
+
     final builder = CBuilder.library(
       name: 'mecab_dart',
       assetName: 'mecab_ffi_native.dart',
       language: Language.cpp,
-      flags: ['-std=c++11'],
+      flags: [
+        // set standard version
+        if (input.config.code.targetOS == OS.windows) '/std:c++14'
+        else '-std=c++11',
+        // Add explicit exception handling for MSVC
+        if (input.config.code.targetOS == OS.windows) ...[
+          '/EHsc',
+          '/O2',
+          '/GL',
+          '/GA',
+          '/Ob2',
+          '/W3',
+          '/MT',
+          '/Zi',
+          '/wd4800',
+          '/wd4305',
+          '/wd4244',
+        ]
+      ],
+      includes: ['src', 'src/$platform'],
+      defines: {
+        'HAVE_CONFIG_H': null,
+      },
       sources: [
-        'src/char_property.cpp',
-        'src/eval.cpp',
-        'src/nbest_generator.cpp',
-        'src/tokenizer.cpp',
-        'src/connector.cpp',
-        'src/iconv_utils.cpp',
-        'src/param.cpp',
-        'src/utils.cpp',
-        'src/context_id.cpp',
-        'src/libmecab.cpp',
-        'src/string_buffer.cpp',
-        'src/viterbi.cpp',
-        'src/dictionary.cpp',
         'src/dart_ffi.cpp',
-        'src/tagger.cpp',
-        'src/writer.cpp',
+        'src/$platform/char_property.cpp',
+        'src/$platform/eval.cpp',
+        'src/$platform/nbest_generator.cpp',
+        'src/$platform/tokenizer.cpp',
+        'src/$platform/connector.cpp',
+        'src/$platform/iconv_utils.cpp',
+        'src/$platform/param.cpp',
+        'src/$platform/utils.cpp',
+        'src/$platform/context_id.cpp',
+        'src/$platform/libmecab.cpp',
+        'src/$platform/string_buffer.cpp',
+        'src/$platform/viterbi.cpp',
+        'src/$platform/dictionary.cpp',
+        'src/$platform/tagger.cpp',
+        'src/$platform/writer.cpp',
+        if (input.config.code.targetOS == OS.windows) ...[
+          'src/$platform/feature_index.cpp',
+          'src/$platform/dictionary_rewriter.cpp',
+          'src/$platform/dictionary_generator.cpp',
+          'src/$platform/dictionary_compiler.cpp',
+          'src/$platform/learner.cpp',
+          'src/$platform/learner_tagger.cpp',
+          'src/$platform/lbfgs.cpp',
+        ]
       ],
     );
 
-    await builder.run(input: input, output: output);
+    await builder.run(
+      input: input,
+      output: output,
+      logger: Logger('')
+        ..level = Level.ALL
+        ..onRecord.listen((record) => print(record.message)),
+    );
 
     // Only run the workaround for Android targets
     if (input.config.code.targetOS == OS.android) {

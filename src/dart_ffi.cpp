@@ -6,7 +6,17 @@
 #include <cstdlib>
 #include <map>
 #include <mutex>
-#include <iostream> 
+#include <iostream>
+
+
+#if defined(_WIN32)
+    // Windows/MSVC logic
+    #define FFI_EXPORT __declspec(dllexport)
+    #pragma comment(lib, "Advapi32.lib")
+#else
+    // Unix/GCC/Clang logic
+    #define FFI_EXPORT __attribute__((visibility("default"))) __attribute__((used))
+#endif
 
 // Holds a pointer to the heavyweight Dictionary Model and its active reference count.
 struct ModelEntry {
@@ -50,8 +60,9 @@ std::vector<std::string> generateArgs(const std::string& opt, const std::string&
     return args;
 }
 
-extern "C" __attribute__((visibility("default"))) __attribute__((used))
-void* initMecab(const char* opt, const char* dicdir, const char* libpath) {
+extern "C" {
+
+FFI_EXPORT void* initMecab(const char* opt, const char* dicdir, const char* libpath) {
     std::lock_guard<std::mutex> lock(registry_mutex);
     
     std::string key = get_registry_key(dicdir, libpath, opt);
@@ -97,8 +108,7 @@ void* initMecab(const char* opt, const char* dicdir, const char* libpath) {
     return (void*)tagger;
 }
 
-extern "C" __attribute__((visibility("default"))) __attribute__((used))
-void destroyMecab(void* tagger_ptr) {
+FFI_EXPORT void destroyMecab(void* tagger_ptr) {
     if (!tagger_ptr) return;
 
     std::lock_guard<std::mutex> lock(registry_mutex);
@@ -129,13 +139,13 @@ void destroyMecab(void* tagger_ptr) {
     }
 }
 
-extern "C" __attribute__((visibility("default"))) __attribute__((used))
-const char* parse(void* tagger_ptr, const char* input) {
+FFI_EXPORT const char* parse(void* tagger_ptr, const char* input) {
     if (!tagger_ptr) return "";
     return mecab_sparse_tostr((mecab_t*)tagger_ptr, input);
 }
 
-extern "C" __attribute__((visibility("default"))) __attribute__((used))
-int32_t native_add(int32_t x, int32_t y) {
+FFI_EXPORT int32_t native_add(int32_t x, int32_t y) {
     return x + y;
+}
+
 }
