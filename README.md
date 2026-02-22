@@ -133,3 +133,8 @@ Those files then need to be loaded by your application.
 For more details, see the example in the Flutter package.
 
 </details>
+
+## Testing
+
+For the tests to work, you need to download the `assets.zip` from the latest release on GitHub (it contains the dictionary files).
+Unpack it so that its content is in the `assets/` directory of this project.
