@@ -1,5 +1,9 @@
 # Mecab for dart
 
+## 2.0.1
+
+* Provide default values in `MecabTransferableState`
+
 ## 2.0.0
 
 * Complete refactor of the library

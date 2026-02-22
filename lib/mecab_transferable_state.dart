@@ -1,29 +1,31 @@
 import 'dart:convert';
 
+import 'package:mecab_for_dart/globals.dart';
+
 class MecabTransferableState {
-  final String webLibMecabPath;
   final String mecabDictDirPath;
   final String options;
+  final String webLibMecabPath;
 
   MecabTransferableState({
-    required this.webLibMecabPath,
     required this.mecabDictDirPath,
-    required this.options,
+    this.options = defaultOptions,
+    this.webLibMecabPath = defaultWebLibMecabPath,
   });
 
   Map<String, dynamic> toJson() => {
-    "libmecabPath": webLibMecabPath,
     "mecabDictDirPath": mecabDictDirPath,
     "options": options,
+    "webLibMecabPath": webLibMecabPath,
   };
 
   String toJsonString() => jsonEncode(toJson());
 
   factory MecabTransferableState.fromJson(Map<String, dynamic> json) {
     return MecabTransferableState(
-      webLibMecabPath: json["libmecabPath"],
       mecabDictDirPath: json["mecabDictDirPath"],
       options: json["options"],
+      webLibMecabPath: json["webLibMecabPath"],
     );
   }
 

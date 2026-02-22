@@ -2,6 +2,7 @@ export 'token_node.dart';
 export 'mecab_transferable_state.dart';
 
 // Package imports:
+import 'package:mecab_for_dart/globals.dart';
 import 'package:mecab_for_dart/mecab_transferable_state.dart';
 
 // Project imports:
@@ -20,17 +21,17 @@ class Mecab {
   // universal_ffi Pointer<Void> are technically different types to the analyzer.
   dynamic _mecabPtr;
 
-  /// Path to the Mecab dynamic library used
-  late final String weblibmecabPath;
   /// Path to the Mecab dictionary directory used
   late final String mecabDictDirPath;
   /// Whether to include token features in the output
   late final String options;
+  /// Path to the Mecab dynamic library used
+  late final String weblibmecabPath;
 
   MecabTransferableState get transferableState => MecabTransferableState(
-    webLibMecabPath: weblibmecabPath,
     mecabDictDirPath: mecabDictDirPath,
     options: options,
+    webLibMecabPath: weblibmecabPath,
   );
 
   Mecab._internal();
@@ -43,9 +44,8 @@ class Mecab {
   ///                is located.
   static Future<Mecab> create({
     required String dictDir,
-    String options = "",
-    String webLibmecabPath = "assets/blobs/libmecab.js",
-    
+    String options = defaultOptions,
+    String webLibmecabPath = defaultWebLibMecabPath,
   }) async {
   
     final instance = Mecab._internal();
