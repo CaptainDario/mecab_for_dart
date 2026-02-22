@@ -2,6 +2,11 @@
 
 ## 2.0.1
 
+* Fixed: hooks
+* Fixed: default options
+
+## 2.0.1
+
 * Provide default values in `MecabTransferableState`
 
 ## 2.0.0
