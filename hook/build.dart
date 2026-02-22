@@ -9,6 +9,9 @@ void main(List<String> args) async {
 
   await build(args, (input, output) async {
 
+    // skip web (all unsupported OSs) as it is not supported by hooks
+    if (!input.config.json.containsKey('code')) return;
+
     String platform = input.config.code.targetOS == OS.windows ? "windows" : "unix";
 
     final builder = CBuilder.library(
