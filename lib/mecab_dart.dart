@@ -21,14 +21,14 @@ class Mecab {
   dynamic _mecabPtr;
 
   /// Path to the Mecab dynamic library used
-  late final String? weblibmecabPath;
+  late final String weblibmecabPath;
   /// Path to the Mecab dictionary directory used
   late final String mecabDictDirPath;
   /// Whether to include token features in the output
   late final String options;
 
   MecabTransferableState get transferableState => MecabTransferableState(
-    libmecabPath: weblibmecabPath,
+    webLibMecabPath: weblibmecabPath,
     mecabDictDirPath: mecabDictDirPath,
     options: options,
   );
@@ -44,7 +44,7 @@ class Mecab {
   static Future<Mecab> create({
     required String dictDir,
     String options = "",
-    String? webLibmecabPath,
+    String webLibmecabPath = "assets/blobs/libmecab.js",
     
   }) async {
   
@@ -120,7 +120,7 @@ class Mecab {
     return await Mecab.create(
       dictDir: state.mecabDictDirPath,
       options: state.options,
-      webLibmecabPath: state.libmecabPath,
+      webLibmecabPath: state.webLibMecabPath,
     );
   }
 

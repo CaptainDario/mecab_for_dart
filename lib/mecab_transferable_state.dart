@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 class MecabTransferableState {
-  final String? libmecabPath;
+  final String webLibMecabPath;
   final String mecabDictDirPath;
   final String options;
 
   MecabTransferableState({
-    this.libmecabPath,
+    required this.webLibMecabPath,
     required this.mecabDictDirPath,
     required this.options,
   });
 
   Map<String, dynamic> toJson() => {
-    "libmecabPath": libmecabPath,
+    "libmecabPath": webLibMecabPath,
     "mecabDictDirPath": mecabDictDirPath,
     "options": options,
   };
@@ -21,7 +21,7 @@ class MecabTransferableState {
 
   factory MecabTransferableState.fromJson(Map<String, dynamic> json) {
     return MecabTransferableState(
-      libmecabPath: json["libmecabPath"],
+      webLibMecabPath: json["libmecabPath"],
       mecabDictDirPath: json["mecabDictDirPath"],
       options: json["options"],
     );
