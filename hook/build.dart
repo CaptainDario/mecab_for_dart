@@ -10,7 +10,14 @@ void main(List<String> args) async {
   await build(args, (input, output) async {
 
     // skip web (all unsupported OSs) as it is not supported by hooks
-    if (!input.config.json.containsKey('code')) return;
+    try {
+      // Accessing .code threw a Null Check on Web. 
+      // If it throws, we catch it and skip the build safely.
+      var _ = input.config.code.targetOS;
+    }
+    catch (_) {
+      return; 
+    }
 
     String platform = input.config.code.targetOS == OS.windows ? "windows" : "unix";
 
