@@ -7,8 +7,9 @@
   * Use the `await Mecab.create(...)` factory
 * MeCab can now safely be shared across isolates
   * Use `.transferableState` and `.fromTransferableState(...)` to safely share across isolates
-  * Dictionary memory will only be consumed once per `library + dictionary` combination
-* The flutter package now does NOT contain any logic, it only binds the MeCab library to the flutter application
+  * Dictionary memory will only be consumed once per `library + dictionary + options` combination
+* Use hooks on native platforms (currently no web support)
+  * The flutter package is now basically deprecated (only used for the example)
 
 ## 1.3.0
 
