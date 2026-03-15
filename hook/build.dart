@@ -4,6 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:native_toolchain_c/native_toolchain_c.dart';
 import 'package:native_toolchain_c/src/cbuilder/run_cbuilder.dart';
 import 'package:native_toolchain_c/src/native_toolchain/android_ndk.dart';
+import 'package:native_toolchain_c/src/tool/tool_resolver.dart';
 
 void main(List<String> args) async {
 
@@ -98,7 +99,9 @@ Future<void> _bundleAndroidStdLib(BuildInput input, BuildOutputBuilder output) a
   final targetArchitecture = input.config.code.targetArchitecture;
   
   final aclang = await androidNdkClang.defaultResolver!.resolve(
-    logger: Logger(''),
+    ToolResolvingContext(
+      logger: Logger('')
+    ),
   );
 
   for (final tool in aclang) {
