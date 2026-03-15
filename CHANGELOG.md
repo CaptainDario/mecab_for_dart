@@ -1,6 +1,10 @@
 # Mecab for dart
 
-## 2.0.1
+## 2.0.3
+
+* Fixed: native_toolchain_c: ^0.17.2 breaks this package
+
+## 2.0.2
 
 * Fixed: hooks
 * Fixed: default options
